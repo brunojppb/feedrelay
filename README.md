@@ -77,10 +77,6 @@ The production image is published to GHCR:
 ghcr.io/brunojppb/feedrelay:latest
 ```
 
-**Note:** Image builds are currently manual (`docker build`). A CI publish job is not yet wired up — see `.github/workflows/ci.yml` for the CI-only workflow.
-
-### With `docker run`
-
 For a one-off deployment without compose, pull the image and run it directly:
 
 ```bash
@@ -187,12 +183,3 @@ sqlite3 feedrelay-data/feedrelay.db ".backup 'backup.db'"
 ```
 
 **Stuck jobs** — if the process is killed mid-pipeline, the `runs` row may remain in `running` state. Restart the service; the Apalis worker will pick up pending jobs from the queue. Stuck-run cleanup at startup is noted as future work in the PRD.
-
-## Open questions / future work
-
-See PRD §13 (`plans/prd_feedrelay_web_server.md`) for the full list. Highlights:
-
-- Multi-arch Docker builds (currently amd64 only)
-- Startup cleanup of stuck `runs` rows
-- Renovate / Dependabot for dependency updates
-- CI image publish to GHCR on push to `main`

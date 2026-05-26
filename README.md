@@ -5,10 +5,6 @@
 </p>
 
 
-# FeedRelay
-
-FeedRelay is a personal automation service that picks a photo from an [Immich](https://immich.app) library, generates an Instagram caption with OpenAI, and schedules the post via the Buffer API. It runs as a single statically-linked binary backed by SQLite (via Apalis for job queuing).
-
 ## Architecture
 
 FeedRelay is a single Rust binary. An actix-web server handles two endpoints — `POST /trigger/post` (kicks off a run) and `GET /pic/<uuid>.jpg` (serves images to Buffer). An [Apalis](https://github.com/geofmureithi/apalis) worker runs in the same process, backed by the same SQLite database that stores audit rows. Everything that needs to survive a restart (job queue, run history, scheduled-post audit, pending images) lives in one SQLite file.
@@ -103,7 +99,7 @@ docker run -d \
 
 Update with `docker pull ghcr.io/brunojppb/feedrelay:latest && docker restart feedrelay`.
 
-### On the home server (bee)
+### On the home server
 
 ```bash
 # First time

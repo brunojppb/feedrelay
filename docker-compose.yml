@@ -1,0 +1,25 @@
+services:
+  feedrelay:
+    image: ghcr.io/brunojppb/feedrelay:latest
+    container_name: feedrelay
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=8080
+      - DATABASE_URL=sqlite:///data/feedrelay.db
+    volumes:
+      # SQLite database file persisted on the host.
+      - ./feedrelay-data:/data
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      # Replace with your own host before deploying.
+      - "traefik.http.routers.feedrelay.rule=Host(`feedrelay.example.com`)"
+      - "traefik.http.routers.feedrelay.entrypoints=websecure"
+      - "traefik.http.routers.feedrelay.tls.certresolver=cloudflare"
+      - "traefik.http.services.feedrelay.loadbalancer.server.port=8080"
+
+networks:
+  traefik:
+    external: true

@@ -1,0 +1,12 @@
+target/
+.git/
+.github/
+.env
+*.db
+*.db-shm
+*.db-wal
+docs/
+plans/
+README.md
+CONTEXT.md
+feedrelay-data/

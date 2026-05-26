@@ -1,3 +1,10 @@
+<p align="center"><br><img src="./feedrelay.png" width="866" height="455" alt="FeedRelay logo" /></p>
+<h2 align="center">FeedRelay</h2>
+<p align="center">
+    Your personal automation service that picks a photo from an <a href="https://immich.app">Immich</a> library, generates an Instagram caption with OpenAI, and schedules the post via the <a href="https://developers.buffer.com/">Buffer API</a>.
+</p>
+
+
 # FeedRelay
 
 FeedRelay is a personal automation service that picks a photo from an [Immich](https://immich.app) library, generates an Instagram caption with OpenAI, and schedules the post via the Buffer API. It runs as a single statically-linked binary backed by SQLite (via Apalis for job queuing).

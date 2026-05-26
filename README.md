@@ -6,6 +6,9 @@ FeedRelay is a personal automation service that picks a photo from an [Immich](h
 
 FeedRelay is a single Rust binary. An actix-web server handles two endpoints — `POST /trigger/post` (kicks off a run) and `GET /pic/<uuid>.jpg` (serves images to Buffer). An [Apalis](https://github.com/geofmureithi/apalis) worker runs in the same process, backed by the same SQLite database that stores audit rows. Everything that needs to survive a restart (job queue, run history, scheduled-post audit, pending images) lives in one SQLite file.
 
+<details>
+<summary>Pipeline diagram</summary>
+
 ```mermaid
 flowchart TD
     A[POST /trigger/post] --> B[Enqueue run in SQLite]
@@ -28,6 +31,8 @@ flowchart TD
     style H fill:#fff8e1
     style L fill:#f3e5f5
 ```
+
+</details>
 
 A few things in the diagram are worth calling out:
 
@@ -70,6 +75,26 @@ ghcr.io/brunojppb/feedrelay:latest
 ```
 
 **Note:** Image builds are currently manual (`docker build`). A CI publish job is not yet wired up — see `.github/workflows/ci.yml` for the CI-only workflow.
+
+### With `docker run`
+
+For a one-off deployment without compose, pull the image and run it directly:
+
+```bash
+docker run -d \
+  --name feedrelay \
+  -p 8080:8080 \
+  -v "$(pwd)/feedrelay-data:/data" \
+  --env-file .env \
+  --restart unless-stopped \
+  ghcr.io/brunojppb/feedrelay:latest
+```
+
+- `-p 8080:8080` — exposes the HTTP server. Put a reverse proxy (Traefik, Caddy, nginx) in front for TLS; Buffer needs to reach `PUBLIC_BASE_URL` over the public internet to fetch `/pic/<uuid>.jpg`.
+- `-v "$(pwd)/feedrelay-data:/data"` — persists the SQLite database. Set `DATABASE_URL=sqlite:///data/feedrelay.db` in `.env` so the file lands in the mounted volume.
+- `--env-file .env` — loads all configuration. See the [Configuration](#configuration) table above for the full list of variables and which are required.
+
+Update with `docker pull ghcr.io/brunojppb/feedrelay:latest && docker restart feedrelay`.
 
 ### On the home server (bee)
 

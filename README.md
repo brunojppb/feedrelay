@@ -6,6 +6,9 @@ FeedRelay is a personal automation service that picks a photo from an [Immich](h
 
 FeedRelay is a single Rust binary. An actix-web server handles two endpoints — `POST /trigger/post` (kicks off a run) and `GET /pic/<uuid>.jpg` (serves images to Buffer). An [Apalis](https://github.com/geofmureithi/apalis) worker runs in the same process, backed by the same SQLite database that stores audit rows. Everything that needs to survive a restart (job queue, run history, scheduled-post audit, pending images) lives in one SQLite file.
 
+<details>
+<summary>Pipeline diagram</summary>
+
 ```mermaid
 flowchart TD
     A[POST /trigger/post] --> B[Enqueue run in SQLite]
@@ -28,6 +31,8 @@ flowchart TD
     style H fill:#fff8e1
     style L fill:#f3e5f5
 ```
+
+</details>
 
 A few things in the diagram are worth calling out:
 
